@@ -247,29 +247,34 @@ contract ForgeStaking{
     // ERC20 Approve function
 
 
-        function zSetUP1(address token, address _ZeroXBTCAddress, address _Quickswap, address _Staking, address _LP1) public onlyOwner {
+       /* function zSetUP1(address token, address _ZeroXBTCAddress, address _Quickswap, address _Staking, address _LP1) public onlyOwner {
         AddressForgeToken = token;
         AddressZeroXBTC = _ZeroXBTCAddress;
         Quickswap = SwapRouter(_Quickswap);
         LP1 = LiquidityPool(_LP1);
         Forge_Staking = ForgeStaking(_Staking);
-        //ForgeMiningToken = ForgeMiningCT(token);
+       */ //ForgeMiningToken = ForgeMiningCT(token);
  //       lastMinted = ForgeMiningToken.getMiningMinted();
 
+      constructor()  {
+        AddressForgeToken = address(0x0B72b2Ff0e87ff84EFf98451163B78408486Ee5c);
+        AddressZeroXBTC = address(0x6d098aD51D2E49e2F51dCba9c26612EAc0368030);
+        Quickswap = SwapRouter(0x8954AfA98594b838bda56FE4C12a09D7739D179b);
+        LP1 = LiquidityPool(0x870307820C358e4F042E5Bf59229bEB676eB9E83);
+        Forge_Staking = ForgeStaking(0x2bDd577B962586aB1105C17a9bF32Ab7a3d62Cdb);
     }
 
-    function FullETHtoForgeTEST(uint256 amountInPolygon, uint256 haircut, address [] memory path, address [] memory path2, address whoToStakeFor) public payable returns (bool success){
-        uint256 startBal = IERC20(ForgeTokenAddress).balanceOf(address(this));
+    function FullETHtoForgeTEST(uint256 amountInPolygon) public payable returns (bool success){
+        uint256 startBal = IERC20(AddressForgeToken).balanceOf(address(this));
         uint112 _reserve0; // 0xBTC ex 2 in getReserves
         uint112 _reserve1; // Forge;
         uint32 _blockTimestampLast;
 
-         (_reserve0, _reserve1, _blockTimestampLast) = LP3.getReserves(); //0xBTC/Forge
+         (_reserve0, _reserve1, _blockTimestampLast) = LP1.getReserves(); //0xBTC/Forge
 
          uint256 TotalForgeToRecieve = amountInPolygon / ( _reserve0 + amountInPolygon) * _reserve1;
          TotalForgeToRecieve = TotalForgeToRecieve * 90 / 100; //Must get 90% possibly let this be passed as haircut
-         IERC20(_tokenIn).approve(Quickswap, 9881237367);
-
+         IERC20(AddressForgeToken).approve(address(Quickswap), 9881237367);
     }
     
     function FullETHtoForge(uint256 amountInPolygon, uint256 haircut, address [] memory path, address [] memory path2, address whoToStakeFor) public payable returns (bool success){
